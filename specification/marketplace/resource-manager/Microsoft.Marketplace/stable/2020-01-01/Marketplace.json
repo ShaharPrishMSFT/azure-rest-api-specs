@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "version": "2020-01-01",
+    "version": "2019-12-01",
     "title": "Marketplace RP Service"
   },
   "host": "management.azure.com",
@@ -9,12 +9,189 @@
     "https"
   ],
   "paths": {
+    "/subscriptions/{subscriptionId}/providers/Microsoft.Marketplace/PrivateStore/Collections/Default/Offers": {
+      "post": {
+        "description": "Update or add an offer to the default collection of the private store. If this is working against a subscription, {scope} will be /subscription/{subscriptionId}",
+        "consumes": ["application/json"],
+        "parameters": [
+          {
+             "$ref": "subscriptionIdParameter"
+          },
+          {
+            "$ref": "offerObjectParameter"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "422": {
+            "$ref": "PrivateStoreAddOffer422"
+          }
+        }
+      }
+    },
+    "/providers/Microsoft.Marketplace/PrivateStore/Collections/Default/Offers": {
+      "post": {
+        "description": "Update or add an offer to the default collection of the private store.",
+        "consumes": ["application/json"],
+        "parameters": [
+          {
+            "$ref": "offerObjectParameter"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "422": {
+            "$ref": "PrivateStoreAddOffer422"
+          }
+        }
+      }
+    },
+    "/subscriptions/{subscriptionId}/providers/Microsoft.Marketplace/PrivateStore/Collections/Default/Offers/{OfferId}": {
+      "delete":{
+        "description": "Deletes an offer from the default collection of the private store. {scope} will be of the form /subscription/{subscriptionId}",
+        "parameters": [
+          {
+            "$ref": "subscriptionIdParameter"
+          },
+          {
+            "$ref": "offerIdPathParameter"
+          }
+        ],
+        "responses": {
+          "200":{
+            "description": "OK - offer deleted"
+          },
+          "404": {
+            "$ref": "PrivateStoreOffer404"
+          }
+        }
+      }
+    },
+    "/providers/Microsoft.Marketplace/PrivateStore/Collections/Default/Offers/{OfferId}": {
+      "delete":{
+        "description": "Deletes an offer from the default collection of the private store. ",
+        "parameters": [
+          {
+            "$ref": "scopePathParameter"
+          },
+          {
+            "$ref": "offerIdPathParameter"
+          }
+        ],
+        "responses": {
+          "200":{
+            "description": "OK - offer deleted"
+          },
+          "404": {
+            "$ref": "PrivateStoreOffer404"
+          }
+        }
+      }
+    },
+    "/providers/Microsoft.Marketplace/PrivateStore/PrivateClientSupport": {
+      "get": {
+        "tags": [
+          "isPrivateClient"
+        ],
+        "description": "Check if client is private or not. Replaces /subscriptions/{subscriptionId}/providers/Microsoft.Marketplace/privateStoreClient/isPrivateClient and is tenant based. TBD: Can we live with tenant only check here?",
+        "operationId": "PrivateStoreClient_Get",
+        "parameters": [
+          {
+            "$ref": "#/parameters/ApiVersionParameter"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK. The request has succeeded."
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ]
+      }
+    },
+    "/subscriptions/{subscriptionId}/providers/Microsoft.Marketplace/PrivateStore/Eligibility/OfferTypes/{offerType}/Publishers/{publisherId}/Offers/{offerId}/Plans/{skuId}": {
+      "get":{
+        "description": "Checks for eligibility for installation of a given offer",
+        "produces":[
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "subscriptionIdParameter"
+          },
+          {
+            "$ref": "offerIdPathParameter"
+          },
+          {
+            "$ref": "skuIdPathParameter"
+          },
+          {
+            "$ref": "publisherIdPathParameter"
+          },
+          {
+            "$ref": "offerIdPathParameter"
+          }
+        ],
+        "responses": {
+          "200":{
+            "description": "Call successful.",
+            "schema":{
+              "$ref": "EligibilityResponse"
+            }
+          },
+          "404":{
+            "description": "Entity not found"
+          }
+        }
+      }
+    },
+    "/providers/Microsoft.Marketplace/PrivateStore/Eligibility/OfferTypes/{offerType}/Publishers/{publisherId}/Offers/{offerId}/Plans/{skuId}": {
+      "get":{
+        "description": "Checks for eligibility for installation of a given offer",
+        "produces":[
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "offerIdPathParameter"
+          },
+          {
+            "$ref": "skuIdPathParameter"
+          },
+          {
+            "$ref": "publisherIdPathParameter"
+          },
+          {
+            "$ref": "offerIdPathParameter"
+          }
+        ],
+        "responses": {
+          "200":{
+            "description": "Call successful.",
+            "schema":{
+              "$ref": "EligibilityResponse"
+            }
+          },
+          "404":{
+            "description": "Entity not found"
+          }
+        }
+      }
+    },
     "/subscriptions/{subscriptionId}/providers/Microsoft.Marketplace/privateStoreClient/isPrivateClient": {
       "get": {
         "tags": [
           "isPrivateClient"
         ],
-        "description": "Check if client is private or not.",
+        "description": "Check if client is private or not. This is superceeded by /subscriptions/{subscriptionId}/providers/Microsoft.Marketplace/PrivateStore/PrivateClient",
         "operationId": "PrivateStoreClient_Get",
         "parameters": [
           {
@@ -85,6 +262,58 @@
         "description": "The Azure subscription ID.",
         "required": true,
         "type": "string"
+      },
+      "tenantIdInHeader" :{
+        "in":"header",
+        "name" : "X-TenantId",
+        "type": "string",
+        "required": true,
+        "description": "TBD: We must have existing headers for this. Use those."
+      },
+      "offerIdPathParameter": {
+        "in":"path",
+        "name" : "offerId",
+        "type": "string",
+        "required": true,
+        "description": "The offer ID to update or delete"
+      },
+      "offerTypePathParameter": {
+        "in":"path",
+        "name" : "offerType",
+        "type": "string",
+        "required": true,
+        "description": "The offer type being accessed"
+      },
+      "publisherIdPathParameter": {
+        "in":"path",
+        "name" : "publisherId",
+        "type": "string",
+        "required": true,
+        "description": "The publisher ID being accessed"
+      },
+      "skuIdPathParameter": {
+        "in":"path",
+        "name" : "skuId",
+        "type": "string",
+        "required": true,
+        "description": "The offer ID to update or delete"
+      },
+      "offerObjectParameter":{ 
+        "in":"body",
+        "name": "offerObject",
+        "schema":{
+          "type": "object",
+          "required": ["id", "publisherId", "offerId", "offerType", "sku", "availabilitySet", "version"],
+          "properties": {
+            "id" : { "type": "string"  },
+            "publisherId" : { "type": "string"},
+            "offerId" : { "type": "string"},
+            "offetTYpe" : { "type": "string"},
+            "sku" : { "type": "string"},
+            "availabilitySet" : { "type": "string"},
+            "version" : { "type": "string"}
+          }
+        }
       }
     },
   "definitions": {
@@ -106,8 +335,27 @@
                 "readOnly": true
               }
             }
-          }
-        }
+          },
+        "EligibilityResponse":
+        {
+            "description": "Eligibility response for a given offer",
+            "type": "object",
+            "properties": {
+              "isEligible":
+              {
+                "type":"boolean"
+              }
+            }
+        },
+      "PrivateStoreAddOffer422":
+      {
+        "description": "[TBD: Is this needed? Can we update the content?] Offer with given id already exists in the collection"
+      },
+      "PrivateStoreOffer404":
+      {
+        "description": "The offer id is could not be found in this private store collection"
+      }
+    }
       },
       "Operation": {
         "description": "Microsoft.Marketplace REST API operation",
