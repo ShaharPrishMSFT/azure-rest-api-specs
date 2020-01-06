@@ -82,7 +82,6 @@
         "produces": [
           "application/json"
         ],
-        "operationId": "PrivateStoreClient_Get",
         "responses": {
           "200": {
             "description": "OK. The request has succeeded.",
@@ -226,7 +225,7 @@
     },
     "offerIdPathParameter": {
       "in": "path",
-      "name": "offerId",
+      "name": "OfferId",
       "type": "string",
       "required": true,
       "description": "The offer ID to update or delete"
@@ -267,7 +266,10 @@
             "type": "string"
           },
           "skus": {
-            "type": "array"
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           },
           "version": {
             "type": "string"
