@@ -39,7 +39,7 @@
             "description": "OK"
           },
           "422": {
-            "$ref": "#/definitions/PrivateStoreAddOffer422"
+            "$ref": "#/responses/PrivateStoreAddOffer422"
           }
         }
       }
@@ -57,7 +57,7 @@
             "description": "OK - offer deleted"
           },
           "404": {
-            "$ref": "#/definitions/PrivateStoreOffer404"
+            "$ref": "#/responses/PrivateStoreOffer404"
           }
         }
       },
@@ -100,6 +100,7 @@
         "parameters": [
           {
             "in": "body",
+            "name": "payload",
             "schema": {
               "$ref": "#/definitions/PrivateStoreEnabledPayload"
             }
@@ -275,6 +276,14 @@
       }
     }
   },
+  "responses": {
+    "PrivateStoreAddOffer422": {
+      "description": "[TBD: Is this needed? Can we update the content?] Offer with given id already exists in the collection"
+    },
+    "PrivateStoreOffer404": {
+      "description": "The offer id is could not be found in this private store collection"
+    }
+  },
   "definitions": {
     "ErrorResponse": {
       "description": "Error response indicates Microsoft.Marketplace service is not able to process the incoming request. The reason is provided in the error message.",
@@ -371,12 +380,6 @@
           "type": "string"
         }
       }
-    },
-    "PrivateStoreAddOffer422": {
-      "description": "[TBD: Is this needed? Can we update the content?] Offer with given id already exists in the collection"
-    },
-    "PrivateStoreOffer404": {
-      "description": "The offer id is could not be found in this private store collection"
     },
     "Operation": {
       "description": "Microsoft.Marketplace REST API operation",
