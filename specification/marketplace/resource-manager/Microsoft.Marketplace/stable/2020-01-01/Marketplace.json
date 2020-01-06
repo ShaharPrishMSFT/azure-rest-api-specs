@@ -31,7 +31,7 @@
         ],
         "parameters": [
           {
-            "$ref": "offerObjectParameter"
+            "$ref": "#/parameters/offerObjectParameter"
           }
         ],
         "responses": {
@@ -39,15 +39,15 @@
             "description": "OK"
           },
           "422": {
-            "$ref": "PrivateStoreAddOffer422"
+            "$ref": "#/definitions/PrivateStoreAddOffer422"
           }
         }
       }
     },
-    "/providers/Microsoft.Marketplace/PrivateStore/Collections/Default/Offers/{OfferId}": {
+    "/providers/Microsoft.Marketplace/PrivateStore/Offers/{OfferId}": {
       "parameters": [
         {
-          "$ref": "offerIdPathParameter"
+          "$ref": "#/parameters/offerIdPathParameter"
         }
       ],
       "delete": {
@@ -57,7 +57,7 @@
             "description": "OK - offer deleted"
           },
           "404": {
-            "$ref": "PrivateStoreOffer404"
+            "$ref": "#/definitions/PrivateStoreOffer404"
           }
         }
       },
@@ -120,17 +120,17 @@
         ],
         "parameters": [
           {
-            "$ref": "offerIdPathParameter"
+            "$ref": "#/parameters/offerIdPathParameter"
           },
           {
-            "$ref": "skuIdPathParameter"
+            "$ref": "#/parameters/skuIdPathParameter"
           }
         ],
         "responses": {
           "200": {
             "description": "Call successful.",
             "schema": {
-              "$ref": "EligibilityResponse"
+              "$ref": "#/definitions/EligibilityResponse"
             }
           },
           "404": {
@@ -257,32 +257,16 @@
       "schema": {
         "type": "object",
         "required": [
-          "id",
-          "publisherId",
           "offerId",
-          "offerType",
-          "sku",
-          "availabilitySet",
+          "skus",
           "version"
         ],
         "properties": {
-          "id": {
-            "type": "string"
-          },
-          "publisherId": {
-            "type": "string"
-          },
           "offerId": {
             "type": "string"
           },
-          "offetTYpe": {
-            "type": "string"
-          },
-          "sku": {
-            "type": "string"
-          },
-          "availabilitySet": {
-            "type": "string"
+          "skus": {
+            "type": "array"
           },
           "version": {
             "type": "string"
@@ -310,95 +294,89 @@
               "readOnly": true
             }
           }
-        },
-        "EligibilityResponse": {
-          "description": "Eligibility response for a given offer",
-          "type": "object",
-          "properties": {
-            "isEligible": {
-              "type": "boolean"
-            }
-          }
-        },
-        "PrivateStoreEnabledPayload": {
-          "description": "Describes the json payload on whether or not the private store is enabled for a given tenant",
-          "type": "object",
-          "properties": {
-            "enabled": {
-              "type": "boolean"
-            }
-          }
-        },
-        "OfferListResponse": {
-          "type": "object",
-          "properties": {
-            "value": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/CatalogItemSlim"
-              }
-            },
-            "nextLink": {
-              "type": "string"
-            }
-          }
-        },
-        "CatalogItemSlim": {
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "string"
-            },
-            "displayName": {
-              "type": "string"
-            },
-            "publisherDisplayName": {
-              "type": "string"
-            },
-            "summary": {
-              "type": "string"
-            },
-            "longSummary": {
-              "type": "string"
-            },
-            "description": {
-              "type": "string"
-            },
-            "iconFileUris": {
-              "type": "object",
-              "additionalProperties": {
-                "type": "string"
-              }
-            },
-            "offerType": {
-              "type": "string"
-            },
-            "plans": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/CatalogPlanSlim"
-              }
-            }
-          }
-        },
-        "CatalogPlanSlim": {
-          "type": "object",
-          "properties": {
-            "planId": {
-              "type": "string"
-            },
-            "displayName": {
-              "type": "string"
-            }
-          }
-        },
-        "PrivateStoreAddOffer422": {
-          "description": "[TBD: Is this needed? Can we update the content?] Offer with given id already exists in the collection"
-        },
-        "PrivateStoreOffer404": {
-          "description": "The offer id is could not be found in this private store collection"
         }
       }
+    },
+    "EligibilityResponse": {
+      "description": "Eligibility response for a given offer",
+      "type": "object",
+      "properties": {
+        "isEligible": {
+          "type": "boolean"
+        }
+      }
+    },
+    "PrivateStoreEnabledPayload": {
+      "description": "Describes the json payload on whether or not the private store is enabled for a given tenant",
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        }
+      }
+    },
+    "OfferListResponse": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CatalogItemSlim"
+          }
+        },
+        "nextLink": {
+          "type": "string"
+        }
+      }
+    },
+    "CatalogItemSlim": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "displayName": {
+          "type": "string"
+        },
+        "publisherDisplayName": {
+          "type": "string"
+        },
+        "summary": {
+          "type": "string"
+        },
+        "longSummary": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "offerType": {
+          "type": "string"
+        },
+        "plans": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CatalogPlanSlim"
+          }
+        }
+      }
+    },
+    "CatalogPlanSlim": {
+      "type": "object",
+      "properties": {
+        "planId": {
+          "type": "string"
+        },
+        "displayName": {
+          "type": "string"
+        }
+      }
+    },
+    "PrivateStoreAddOffer422": {
+      "description": "[TBD: Is this needed? Can we update the content?] Offer with given id already exists in the collection"
+    },
+    "PrivateStoreOffer404": {
+      "description": "The offer id is could not be found in this private store collection"
     },
     "Operation": {
       "description": "Microsoft.Marketplace REST API operation",
