@@ -47,7 +47,7 @@
     "/providers/Microsoft.Marketplace/PrivateStore/Offers/{OfferId}": {
       "parameters": [
         {
-          "$ref": "#/parameters/offerIdPathParameter"
+          "$ref": "#/parameters/OfferIdPathParameter"
         }
       ],
       "delete": {
@@ -112,7 +112,7 @@
         }
       }
     },
-    "/providers/Microsoft.Marketplace/PrivateStore/Eligibility/Offers/{offerId}/Plans/{skuId}": {
+    "/providers/Microsoft.Marketplace/PrivateStore/Eligibility/Offers/{OfferId}/Skus/{SkuId}": {
       "get": {
         "description": "Checks for eligibility for installation of a given offer",
         "produces": [
@@ -120,10 +120,10 @@
         ],
         "parameters": [
           {
-            "$ref": "#/parameters/offerIdPathParameter"
+            "$ref": "#/parameters/OfferIdPathParameter"
           },
           {
-            "$ref": "#/parameters/skuIdPathParameter"
+            "$ref": "#/parameters/SkuIdPathParameter"
           }
         ],
         "responses": {
@@ -223,7 +223,7 @@
       "required": true,
       "description": "TBD: We must have existing headers for this. Use those."
     },
-    "offerIdPathParameter": {
+    "OfferIdPathParameter": {
       "in": "path",
       "name": "OfferId",
       "type": "string",
@@ -244,9 +244,9 @@
       "required": true,
       "description": "The publisher ID being accessed"
     },
-    "skuIdPathParameter": {
+    "SkuIdPathParameter": {
       "in": "path",
-      "name": "skuId",
+      "name": "SkuId",
       "type": "string",
       "required": true,
       "description": "The offer ID to update or delete"
