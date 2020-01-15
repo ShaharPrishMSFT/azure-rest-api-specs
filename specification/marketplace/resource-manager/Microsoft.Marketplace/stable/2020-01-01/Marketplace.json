@@ -186,6 +186,7 @@
         "parameters": [
           {
             "in": "body",
+            "name": "skuObject",
             "schema": {
               "$ref": "#/definitions/offerSkuObject"
             }
