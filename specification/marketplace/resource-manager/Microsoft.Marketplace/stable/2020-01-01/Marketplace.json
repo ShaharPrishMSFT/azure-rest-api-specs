@@ -9,7 +9,7 @@
     "https"
   ],
   "paths": {
-    "/providers/Microsoft.Marketplace/PrivateStore/{PrivateStoreId}/Offers": {
+    "/providers/Microsoft.Marketplace/PrivateStores/{PrivateStoreId}/Offers": {
       "parameters": [
         {
           "$ref": "#/parameters/PrivateStoreIdParameter"
@@ -30,7 +30,7 @@
         }
       }
     },
-    "/providers/Microsoft.Marketplace/PrivateStore/{PrivateStoreId}/Offers/{OfferId}": {
+    "/providers/Microsoft.Marketplace/PrivateStores/{PrivateStoreId}/Offers/{OfferId}": {
       "parameters": [
         {
           "$ref": "#/parameters/OfferIdPathParameter"
@@ -81,7 +81,23 @@
         }
       }
     },
-    "/providers/Microsoft.Marketplace/PrivateStore/{PrivateStoreId}": {
+    "/providers/Microsoft.Marketplace/PrivateStores": {
+      "get": {
+        "description": "Gets the list of available private stores",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK. The request has succeeded.",
+            "schema": {
+              "$ref": "#/definitions/PrivateStoreProperties"
+            }
+          }
+        }
+      }
+    },
+    "/providers/Microsoft.Marketplace/PrivateStores/{PrivateStoreId}": {
       "parameters": [
         {
           "$ref": "#/parameters/PrivateStoreIdParameter"
@@ -98,6 +114,20 @@
             "schema": {
               "$ref": "#/definitions/PrivateStoreProperties"
             }
+          }
+        }
+      },
+      "delete": {
+        "description": "Deletes the private store. All that is not saved will be lost.",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK. The request has succeeded."
+          },
+          "404": {
+            "description": "Could not find the store"
           }
         }
       },
@@ -122,7 +152,7 @@
         }
       }
     },
-    "/providers/Microsoft.Marketplace/PrivateStore/{PrivateStoreId}/Offers/{OfferId}/Skus/{SkuId}": {
+    "/providers/Microsoft.Marketplace/PrivateStores/{PrivateStoreId}/Offers/{OfferId}/Skus/{SkuId}": {
       "parameters": [
         {
           "$ref": "#/parameters/OfferIdPathParameter"
@@ -366,13 +396,28 @@
         }
       }
     },
+    "PrivateStoreList": {
+      "description": "Describes the json payload for the list of available private stores (between zero and one, inclusive)",
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "array",
+          "items": {
+              "$ref": "./PrivateStoreProperties"
+          }
+        }
+      }
+    },
     "PrivateStoreProperties": {
       "description": "Describes the json payload on whether or not the private store is enabled for a given tenant",
       "type": "object",
       "properties": {
-        "status": {
+        "availability": {
           "type": "string",
-          "enum": ["disabled", "staging", "enabled"]
+          "enum": ["enabled", "disabled"]
+        },
+        "name" : {
+          "type": "string"
         }
       }
     },
